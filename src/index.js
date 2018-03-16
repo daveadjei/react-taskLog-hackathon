@@ -31,7 +31,7 @@ class App extends React.Component {
 			<div className="container">
 				<h1>Tasks progress report</h1>
 				<TaskForm onSend={this.fetchPosts.bind(this)}/>
-				<TaskList posts={this.state.posts}/>
+				<TaskList fetchPosts={this.fetchPosts.bind(this)} posts={this.state.posts}/>
 			</div>
 		)
 	}

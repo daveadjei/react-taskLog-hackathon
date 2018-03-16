@@ -57,6 +57,77 @@ export class TaskForm extends React.Component {
 	}
 }
 
+class LogForm extends React.Component{
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			description: "",
+    		hours: 0,
+    		key: 0,
+    		task_key: props.task_key,
+    		user: ""
+		}
+	}
+
+	render() {
+		return (
+			<div className="containter">
+				<label>Description of log:
+					<input
+						type="text"
+						name="description"
+						value={this.state.description}
+						onChange={this.dataChanged.bind(this)}/>
+				</label>
+				<label>Hours spent:
+					<input
+						type="number"
+						name="hours"
+						value={this.state.hours}
+						onChange={this.dataChanged.bind(this)}/>
+				</label>
+				<label>Task key:
+					<input
+						type="number"
+						name="task_key"
+						value={this.props.task_key}
+						onChange={this.dataChanged.bind(this)}/>
+				</label>
+				<label>User:
+					<input
+						type="text"
+						name="user"
+						value={this.state.user}
+						onChange={this.dataChanged.bind(this)}/>
+				</label>
+
+				<button onClick={this.sendPost.bind(this)}>Send</button>
+			</div>
+		)
+	}
+
+	dataChanged(event) {
+		var newState = {};
+		newState[event.target.name] = event.target.value;
+		this.setState(newState);
+	}
+
+	sendPost() {
+		fetch('http://worklog.podlomar.org/logs/create',
+			{
+				mode: 'no-cors',
+				method: "POST",
+				body: JSON.stringify(this.state),
+				headers: {
+					"Content-Type": "application/json"
+				}
+			}
+		).then(function(response) {
+			this.props.onSend();
+		}.bind(this));
+	}
+}
 
 export class Log extends React.Component {
 
@@ -158,13 +229,13 @@ export class Task extends React.Component {
                     {this.props.key}
                 </div>
                 <div>
+					<LogForm onSend={this.props.fetchPosts.bind(this)} task_key={this.props.mykey}/>
                     <LogList logs={this.props.logs} task_key={this.props.mykey}/>
                 </div>
 
             </div>
 		);
 	}
-
 }
 
 export class TaskList extends React.Component {
@@ -185,6 +256,7 @@ export class TaskList extends React.Component {
 						(task) => {
 							return (
 								<Task
+									fetchPosts={this.props.fetchPosts.bind(this)}
                                     name={task.name}
                                     description={task.description}
 									mykey={task.key}
