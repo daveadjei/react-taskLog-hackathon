@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import 'normalize.css';
 import './index.css';
 
-import {Log,LogList} from './tasks/logs.js';
 import { Task,TaskList } from './tasks/tasks';
 
 let tasks = [
@@ -34,65 +33,45 @@ let logs = [
   {
     "description": "Fixing bug #21",
     "hours": 6.0,
-
     "task_key": 1,
     "user": "Jordan Gray"
   },
   {
     "description": "UI clean up",
     "hours": 4.5,
-
     "task_key": 1,
     "user": "Spencer Moore"
   },
   {
     "description": "Optimizing performance",
     "hours": 10.0,
-
     "task_key": 1,
     "user": "Ryan Wells"
   },
   {
     "description": "Menu items on front page",
     "hours": 2.0,
-
     "task_key": 2,
     "user": "Jay Foster"
   },
   {
     "description": "Backand database schema",
     "hours": 5.25,
-
     "task_key": 2,
     "user": "Carmelo Patel"
   }
 ]
 
 class App extends React.Component {
-	// constructor(props){
-	// 	super(props);
-	// 	this.state = {
-	// 		loaded: false,
-	// 		post: []
-	// 	}
-	// }
+
 
 	render() {
-		// if(!this.state.loaded)
-		// 	return(
-		// 		<div className="container">
-		// 		<h1>Loading...</h1>
-		// 		</div>
-		// 	);
 
 		return (
 			<div className="container">
       <h1>Tasks progress report</h1>
       <div >
-      < Task tasks={tasks}/>
-      <div>
-			<LogList logs={logs} />
-      </div>
+      < TaskList tasks={tasks} logs={logs}/>
       </div>
 
 
