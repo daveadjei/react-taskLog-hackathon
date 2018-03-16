@@ -94,7 +94,7 @@ class LogForm extends React.Component{
 					<input
 						type="number"
 						name="task_key"
-						value={this.props.task_key}
+						value={this.state.task_key}
 						onChange={this.dataChanged.bind(this)}/>
 				</label><br/>
 				<label>User:
