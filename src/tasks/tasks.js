@@ -2,6 +2,62 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './tasks.css';
 
+export class TaskForm extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			name: "",
+			description: "",
+			key: 0
+		}
+	}
+
+	render() {
+		return (
+			<div className="containter">
+				<label>Name of task:
+					<input
+						type="text"
+						name="name"
+						value={this.state.name}
+						onChange={this.dataChanged.bind(this)}/>
+				</label>
+				<label>Description of task:
+					<input
+						type="text"
+						name="description"
+						value={this.state.description}
+						onChange={this.dataChanged.bind(this)}/>
+				</label>
+				<button onClick={this.sendPost.bind(this)}>Send</button>
+			</div>
+		)
+	}
+
+	dataChanged(event) {
+		var newState = {};
+		newState[event.target.name] = event.target.value;
+		this.setState(newState);
+	}
+
+	sendPost() {
+		fetch('http://worklog.podlomar.org/tasks/create',
+			{
+				mode: 'no-cors',
+				method: "POST",
+				body: JSON.stringify(this.state),
+				headers: {
+					"Content-Type": "application/json"
+				}
+			}
+		).then(function(response) {
+			this.props.onSend();
+		}.bind(this));
+	}
+}
+
+
 export class Log extends React.Component {
 
 	render() {
@@ -120,33 +176,12 @@ export class TaskList extends React.Component {
         }
     }
 
-    componentWillMount(){
-        fetch('http://worklog.podlomar.org/tasks')
-			.then(response => response.json())
-			.then(
-				(json) => {
-					this.setState(
-						{
-							loaded: true,
-							posts: json
-						}
-					);
-				}
-			);
-    }
 	render() {
-		if(!this.state.loaded){
-            return(
-                <div className="container">
-                    <h1>Please wait a moment...</h1>
-                </div>
-            );
-		}
 
 		return (
 			<div className="container">
 				{
-					this.state.posts.map(
+					this.props.posts.map(
 						(task) => {
 							return (
 								<Task
