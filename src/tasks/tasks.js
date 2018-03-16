@@ -27,12 +27,41 @@ export class Log extends React.Component {
 }
 
 export class LogList extends React.Component {
+	constructor(props){
+        super(props);
+
+        this.state = {
+            loaded: false
+        }
+    }
+
+    componentWillMount(){
+        fetch('http://worklog.podlomar.org/logs')
+			.then(response => response.json())
+			.then(
+				(json) => {
+					this.setState(
+						{
+							loaded: true,
+							posts: json
+						}
+					);
+				}
+			);
+    }
+
 	render() {
-		console.log(this.props.task_key);
+		if(!this.state.loaded){
+            return(
+                <div className="container">
+                    <h1>Please wait a moment...</h1>
+                </div>
+            );
+        }
 		return (
 			<div>
 				{
-					this.props.logs
+					this.state.posts
 					.filter(
 						log => log.task_key == this.props.task_key)
 					.map(
