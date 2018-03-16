@@ -125,7 +125,6 @@ class LogForm extends React.Component{
 			}
 		).then(function(response) {
 			this.props.onSend();
-
 		}.bind(this));
 
 	}
@@ -185,7 +184,47 @@ export class LogList extends React.Component {
 	}
 }
 
-export class Task extends React.Component {
+class TaskSimple extends React.Component {
+	constructor(props){
+        super(props);
+
+        this.state = {
+			loaded: false,
+			logs: []
+        }
+    }
+
+    componentWillMount(){
+		this.fetchPosts();
+    }
+
+	render() {
+		let sum = 0;
+
+		this.state.logs.filter(log => log.task_key==this.props.mykey).forEach(log => { sum+=log.hours });
+		return (
+                <div onClick={this.props.setCurrentTask.bind(this,this.props.mykey)}>
+                    {this.props.name}<span> which took in total </span>{sum}<span> hours.</span>
+                </div>
+
+		);
+	}
+	fetchPosts(){
+		fetch('http://worklog.podlomar.org/logs')
+				.then(response => response.json())
+				.then(
+					(json) => {
+						this.setState(
+							{
+								loaded: true,
+								logs: json
+							}
+						);
+					}
+				);
+	}
+}
+class Task extends React.Component {
 	constructor(props){
         super(props);
 
@@ -238,6 +277,39 @@ export class Task extends React.Component {
 	}
 }
 
+export class TaskListSimple extends React.Component {
+	constructor(props){
+        super(props);
+
+        this.state = {
+            loaded: false
+        }
+    }
+
+	render() {
+
+		return (
+			<div className="container">
+				{
+					this.props.posts.map(
+						(task) => {
+							return (
+								<TaskSimple
+									setCurrentTask = {this.props.setCurrentTask.bind(this)}
+									fetchPosts={this.props.fetchPosts.bind(this)}
+                                    name={task.name}
+                                    description={task.description}
+									mykey={task.key}
+									 />
+							)
+						}
+
+					)
+				}
+			</div>
+		)
+	}
+}
 export class TaskList extends React.Component {
 	constructor(props){
         super(props);
@@ -268,6 +340,61 @@ export class TaskList extends React.Component {
 				}
 			</div>
 		)
+	}
+}
+
+export class SelectedTask extends React.Component{
+	constructor(props){
+        super(props);
+
+        this.state = {
+			loaded: false,
+			logs: []
+        }
+    }
+
+    componentWillMount(){
+		this.fetchPosts();
+	}
+
+	render() {
+		console.log(this.props.currentTask);
+
+		let sum = 0;
+
+		this.state.logs.filter(log => log.task_key==this.props.mykey).forEach(log => { sum+=log.hours });
+		return (
+			<div>
+                <div>
+                    {this.props.name}<span> which took in total </span>{sum}<span> hours.</span>
+                </div>
+                <div>
+                    {this.props.description}
+                </div>
+                <div>
+                    {this.props.mykey}
+                </div>
+                <div>
+					<LogForm onSend={this.fetchPosts.bind(this)} task_key={this.props.mykey}/>
+                    <LogList sumHours={this.state.sumHours} logs={this.state.logs} task_key={this.props.mykey}/>
+                </div>
+
+            </div>
+		);
+	}
+	fetchPosts(){
+		fetch('http://worklog.podlomar.org/task/'+ this.props.currentTask + '/logs')
+				.then(response => response.json())
+				.then(
+					(json) => {
+						this.setState(
+							{
+								loaded: true,
+								logs: json
+							}
+						);
+					}
+				);
 	}
 }
 

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import 'normalize.css';
 import './index.css';
 
-import { TaskForm,TaskList } from './tasks/tasks';
+import { TaskForm,TaskList,TaskListSimple, SelectedTask } from './tasks/tasks';
 
 class App extends React.Component {
   constructor(props) {
@@ -11,16 +11,23 @@ class App extends React.Component {
 
 		this.state = {
 			loaded: false,
-			posts: []
+      posts: [],
+      currentTask: 1
     }
 
-	}
+  }
+
+  setCurrentTask(task_key){
+      this.setState({currentTask: task_key});
+  }
 
 	componentWillMount() {
 		this.fetchPosts();
 	}
 
 	render() {
+    let mytask = this.state.posts.find(task=>task.key == this.state.currentTask)
+
 		if(!this.state.loaded)
 			return (
 				<div className="container">
@@ -32,7 +39,9 @@ class App extends React.Component {
 			<div className="container">
 				<h1>Tasks progress report</h1>
 				<TaskForm onSend={this.fetchPosts.bind(this)}/>
-				<TaskList fetchPosts={this.fetchPosts.bind(this)} posts={this.state.posts}/>
+				<TaskListSimple setCurrentTask={this.setCurrentTask.bind(this)} fetchPosts={this.fetchPosts.bind(this)} posts={this.state.posts}/>
+        <SelectedTask name={mytask.name} description={mytask.description} mykey={mytask.key} currentTask={this.state.currentTask} posts={this.state.posts}/>
+        {/* <TaskList fetchPosts={this.fetchPosts.bind(this)} posts={this.state.posts}/> */}
 			</div>
 		)
 	}
