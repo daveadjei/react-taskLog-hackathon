@@ -8,10 +8,11 @@ export class Log extends React.Component {
 		return (
 			<div>
                 <div>
-                    {this.props.description}
+				<span>What I did: </span>{this.props.description}
                 </div>
                 <div>
-                    {this.props.hours}
+				<span>Hours spent on this: </span> {this.props.hours}
+				<span> h.</span>
                 </div>
                 <div>
                     <span>This belongs to task number: </span>{this.props.task_key}
@@ -27,18 +28,22 @@ export class Log extends React.Component {
 
 export class LogList extends React.Component {
 	render() {
+		console.log(this.props.task_key);
 		return (
 			<div>
 				{
-					this.props.logs.map(
-						(logs) => {
+					this.props.logs
+					.filter(
+						log => log.task_key == this.props.task_key)
+					.map(
+						(log) => {
 							return (
 								<div className="log">
 								<Log
-                                    description={logs.description}
-                                    hours={logs.hours}
-									task_key={logs.task_key}
-									user={logs.user}
+                                    description={log.description}
+                                    hours={log.hours}
+									task_key={log.task_key}
+									user={log.user}
 									 />
 								</div>
 							)
@@ -68,7 +73,7 @@ export class Task extends React.Component {
                     {this.props.key}
                 </div>
                 <div>
-                    <LogList logs={this.props.logs}/>
+                    <LogList logs={this.props.logs} task_key={this.props.mykey}/>
                 </div>
 
             </div>
@@ -83,12 +88,12 @@ export class TaskList extends React.Component {
 			<div className="container">
 				{
 					this.props.tasks.map(
-						(tasks) => {
+						(task) => {
 							return (
 								<Task
-                                    name={tasks.name}
-                                    description={tasks.description}
-									key={tasks.key}
+                                    name={task.name}
+                                    description={task.description}
+									mykey={task.key}
 									logs={this.props.logs}
 
 									 />
