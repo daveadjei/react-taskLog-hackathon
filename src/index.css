@@ -1,1 +1,20 @@
+.column {
+    display: flex;
+    margin:0;
+    width: 45%;
+    padding: 10px;
+    float: left;
+}
+.container {
+    display: block;
+    margin: 10%;
+    color: darkslategrey;
+}
+.task-form {
+    margin: 40px;
+}
 
+body{
+    background-image: url('bgr.jpg');
+    background-position: bottom;
+}

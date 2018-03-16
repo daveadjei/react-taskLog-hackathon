@@ -38,9 +38,15 @@ class App extends React.Component {
 		return (
 			<div className="container">
 				<h1>Tasks progress report</h1>
-				<TaskForm onSend={this.fetchPosts.bind(this)}/>
-				<TaskListSimple setCurrentTask={this.setCurrentTask.bind(this)} fetchPosts={this.fetchPosts.bind(this)} posts={this.state.posts}/>
-        <SelectedTask name={mytask.name} description={mytask.description} mykey={mytask.key} currentTask={this.state.currentTask} posts={this.state.posts}/>
+          <div className="column">
+          <TaskListSimple setCurrentTask={this.setCurrentTask.bind(this)} fetchPosts={this.fetchPosts.bind(this)} posts={this.state.posts}/>
+          </div>
+          <div className="column">
+          <SelectedTask name={mytask.name} description={mytask.description} mykey={mytask.key} currentTask={this.state.currentTask} posts={this.state.posts}/>
+				  </div>
+          <div className="task-form">
+          <TaskForm onSend={this.fetchPosts.bind(this)}/>
+          </div>
         {/* <TaskList fetchPosts={this.fetchPosts.bind(this)} posts={this.state.posts}/> */}
 			</div>
 		)

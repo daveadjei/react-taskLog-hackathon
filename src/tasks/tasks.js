@@ -15,9 +15,11 @@ export class TaskForm extends React.Component {
 
 	render() {
 		return (
-			<div className="containter">
+			<div>
+				<h2>If you want to add a new task:</h2>
 				<label>Name of task:
 					<input
+						className = "form-fields"
 						type="text"
 						name="name"
 						value={this.state.name}
@@ -25,6 +27,7 @@ export class TaskForm extends React.Component {
 				</label>
 				<label>Description of task:
 					<input
+						className = "form-fields"
 						type="text"
 						name="description"
 						value={this.state.description}
@@ -79,28 +82,28 @@ class LogForm extends React.Component{
 						name="description"
 						value={this.state.description}
 						onChange={this.dataChanged.bind(this)}/>
-				</label>
+				</label><br/>
 				<label>Hours spent:
 					<input
 						type="number"
 						name="hours"
 						value={this.state.hours}
 						onChange={this.dataChanged.bind(this)}/>
-				</label>
+				</label><br/>
 				<label>Task key:
 					<input
 						type="number"
 						name="task_key"
 						value={this.props.task_key}
 						onChange={this.dataChanged.bind(this)}/>
-				</label>
+				</label><br/>
 				<label>User:
 					<input
 						type="text"
 						name="user"
 						value={this.state.user}
 						onChange={this.dataChanged.bind(this)}/>
-				</label>
+				</label><br/>
 
 				<button onClick={this.sendPost.bind(this)}>Send</button>
 			</div>
@@ -158,7 +161,7 @@ export class Log extends React.Component {
 export class LogList extends React.Component {
 	render() {
 		return (
-			<div>
+			<div className="log">
 				{
 					this.props.logs
 					.filter(
@@ -203,7 +206,7 @@ class TaskSimple extends React.Component {
 
 		this.state.logs.filter(log => log.task_key==this.props.mykey).forEach(log => { sum+=log.hours });
 		return (
-                <div onClick={this.props.setCurrentTask.bind(this,this.props.mykey)}>
+                <div className="log" onClick={this.props.setCurrentTask.bind(this,this.props.mykey)}>
                     {this.props.name}<span> which took in total </span>{sum}<span> hours.</span>
                 </div>
 
@@ -289,7 +292,7 @@ export class TaskListSimple extends React.Component {
 	render() {
 
 		return (
-			<div className="container">
+			<div>
 				{
 					this.props.posts.map(
 						(task) => {
@@ -366,16 +369,20 @@ export class SelectedTask extends React.Component{
 		return (
 			<div>
                 <div>
-                    {this.props.name}<span> which took in total </span>{sum}<span> hours.</span>
+                   <h4>You have picked task number: {this.props.mykey}</h4><br/>
                 </div>
                 <div>
-                    {this.props.description}
+					<span>Task's name: </span>{this.props.name}<span>.</span><br/>
+					<span>This took a total of </span>{sum}<span> hours.</span>
                 </div>
                 <div>
-                    {this.props.mykey}
+				<span>Description: </span>{this.props.description}
                 </div>
                 <div>
+					<h4>If you want to add a new log:</h4>
 					<LogForm onSend={this.fetchPosts.bind(this)} task_key={this.props.mykey}/>
+					<br/>
+					<h4>Task's log:</h4>
                     <LogList sumHours={this.state.sumHours} logs={this.state.logs} task_key={this.props.mykey}/>
                 </div>
 
