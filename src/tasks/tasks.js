@@ -125,6 +125,7 @@ class LogForm extends React.Component{
 			}
 		).then(function(response) {
 			this.props.onSend();
+
 		}.bind(this));
 
 	}
@@ -195,18 +196,7 @@ export class Task extends React.Component {
     }
 
     componentWillMount(){
-        fetch('http://worklog.podlomar.org/logs')
-			.then(response => response.json())
-			.then(
-				(json) => {
-					this.setState(
-						{
-							loaded: true,
-							logs: json
-						}
-					);
-				}
-			);
+		this.fetchPosts();
     }
 
 	render() {
@@ -225,12 +215,26 @@ export class Task extends React.Component {
                     {this.props.key}
                 </div>
                 <div>
-					<LogForm onSend={this.props.fetchPosts.bind(this)} task_key={this.props.mykey}/>
+					<LogForm onSend={this.fetchPosts.bind(this)} task_key={this.props.mykey}/>
                     <LogList sumHours={this.state.sumHours} logs={this.state.logs} task_key={this.props.mykey}/>
                 </div>
 
             </div>
 		);
+	}
+	fetchPosts(){
+		fetch('http://worklog.podlomar.org/logs')
+				.then(response => response.json())
+				.then(
+					(json) => {
+						this.setState(
+							{
+								loaded: true,
+								logs: json
+							}
+						);
+					}
+				);
 	}
 }
 
