@@ -112,11 +112,41 @@ export class Task extends React.Component {
 }
 
 export class TaskList extends React.Component {
+	constructor(props){
+        super(props);
+
+        this.state = {
+            loaded: false
+        }
+    }
+
+    componentWillMount(){
+        fetch('http://worklog.podlomar.org/tasks')
+			.then(response => response.json())
+			.then(
+				(json) => {
+					this.setState(
+						{
+							loaded: true,
+							posts: json
+						}
+					);
+				}
+			);
+    }
 	render() {
+		if(!this.state.loaded){
+            return(
+                <div className="container">
+                    <h1>Please wait a moment...</h1>
+                </div>
+            );
+		}
+
 		return (
 			<div className="container">
 				{
-					this.props.tasks.map(
+					this.state.posts.map(
 						(task) => {
 							return (
 								<Task
