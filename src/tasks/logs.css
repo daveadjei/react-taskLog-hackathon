@@ -1,4 +1,10 @@
 .container {
-    margin-right: 40px;
+    display: block;
+    margin: 40px;
     color: peru;
+}
+
+.log {
+    display: block;
+    margin: 40px;
 }

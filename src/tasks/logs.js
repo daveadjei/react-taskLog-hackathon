@@ -14,10 +14,7 @@ export class Log extends React.Component {
                     {this.props.hours}
                 </div>
                 <div>
-                    {this.props.key}
-                </div>
-                <div>
-                    {this.props.task_key}
+                    <span>This belongs to task number: </span>{this.props.task_key}
                 </div>
                 <div>
                     {this.props.user}
@@ -36,13 +33,14 @@ export class LogList extends React.Component {
 					this.props.logs.map(
 						(logs) => {
 							return (
+								<div className="log">
 								<Log
                                     description={logs.description}
                                     hours={logs.hours}
-                                    key={logs.key}
-                                    task_key={logs.task_key}
+									task_key={logs.task_key}
                                     user={logs.user}
 									 />
+								</div>
 							)
 						}
 						// Elementary school:
