@@ -126,7 +126,9 @@ class LogForm extends React.Component{
 		).then(function(response) {
 			this.props.onSend();
 		}.bind(this));
+
 	}
+
 }
 
 export class Log extends React.Component {
@@ -154,41 +156,11 @@ export class Log extends React.Component {
 }
 
 export class LogList extends React.Component {
-	constructor(props){
-        super(props);
-
-        this.state = {
-            loaded: false
-        }
-    }
-
-    componentWillMount(){
-        fetch('http://worklog.podlomar.org/logs')
-			.then(response => response.json())
-			.then(
-				(json) => {
-					this.setState(
-						{
-							loaded: true,
-							posts: json
-						}
-					);
-				}
-			);
-    }
-
 	render() {
-		if(!this.state.loaded){
-            return(
-                <div className="container">
-                    <h1>Please wait a moment...</h1>
-                </div>
-            );
-        }
 		return (
 			<div>
 				{
-					this.state.posts
+					this.props.logs
 					.filter(
 						log => log.task_key == this.props.task_key)
 					.map(
@@ -212,15 +184,39 @@ export class LogList extends React.Component {
 	}
 }
 
-
-
 export class Task extends React.Component {
+	constructor(props){
+        super(props);
+
+        this.state = {
+			loaded: false,
+			logs: []
+        }
+    }
+
+    componentWillMount(){
+        fetch('http://worklog.podlomar.org/logs')
+			.then(response => response.json())
+			.then(
+				(json) => {
+					this.setState(
+						{
+							loaded: true,
+							logs: json
+						}
+					);
+				}
+			);
+    }
 
 	render() {
+		let sum = 0;
+
+		this.state.logs.filter(log => log.task_key==this.props.mykey).forEach(log => { sum+=log.hours });
 		return (
 			<div>
                 <div>
-                    {this.props.name}
+                    {this.props.name}<span> which took in total </span>{sum}<span> hours.</span>
                 </div>
                 <div>
                     {this.props.description}
@@ -230,7 +226,7 @@ export class Task extends React.Component {
                 </div>
                 <div>
 					<LogForm onSend={this.props.fetchPosts.bind(this)} task_key={this.props.mykey}/>
-                    <LogList logs={this.props.logs} task_key={this.props.mykey}/>
+                    <LogList sumHours={this.state.sumHours} logs={this.state.logs} task_key={this.props.mykey}/>
                 </div>
 
             </div>
@@ -260,8 +256,6 @@ export class TaskList extends React.Component {
                                     name={task.name}
                                     description={task.description}
 									mykey={task.key}
-									logs={this.props.logs}
-
 									 />
 							)
 						}

@@ -12,7 +12,8 @@ class App extends React.Component {
 		this.state = {
 			loaded: false,
 			posts: []
-		}
+    }
+
 	}
 
 	componentWillMount() {
