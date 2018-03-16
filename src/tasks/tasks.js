@@ -146,9 +146,9 @@ export class Log extends React.Component {
 				<span>Hours spent on this: </span> {this.props.hours}
 				<span> h.</span>
                 </div>
-                <div>
+                {/* <div>
                     <span>This belongs to task number: </span>{this.props.task_key}
-                </div>
+                </div> */}
                 <div>
                     {this.props.user}
                 </div>
@@ -206,8 +206,8 @@ class TaskSimple extends React.Component {
 
 		this.state.logs.filter(log => log.task_key==this.props.mykey).forEach(log => { sum+=log.hours });
 		return (
-                <div className="log" onClick={this.props.setCurrentTask.bind(this,this.props.mykey)}>
-                    {this.props.name}<span> which took in total </span>{sum}<span> hours.</span>
+                <div className="simple-task" onClick={this.props.setCurrentTask.bind(this,this.props.mykey)}>
+                    {this.props.name}<span> - which took in total </span><strong>{sum}</strong><span> hours.</span>
                 </div>
 
 		);
@@ -356,12 +356,8 @@ export class SelectedTask extends React.Component{
         }
     }
 
-    componentWillMount(){
-		this.fetchPosts();
-	}
-
 	render() {
-		console.log(this.props.currentTask);
+		this.fetchPosts();
 
 		let sum = 0;
 
