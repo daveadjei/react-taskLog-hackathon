@@ -43,8 +43,7 @@ export class LogList extends React.Component {
 								</div>
 							)
 						}
-						// Elementary school:
-						// post => <Post user={post.user} text={post.text} />
+
 					)
 				}
 			</div>
